@@ -90,6 +90,11 @@ class ViewController: UIViewController {
             cubeTransition(label: flightNr, text: data.flightNr, direction: direction)
             cubeTransition(label: gateNr, text: data.gateNr, direction: direction)
 
+            let offsetDeparting = CGPoint(x: CGFloat(direction.rawValue * 80), y: 0.0)
+            moveLabel(label: departingFrom, text: data.departingFrom, offset: offsetDeparting)
+
+            let offsetArriving = CGPoint(x: 0.0, y: CGFloat(direction.rawValue * 50))
+            moveLabel(label: arrivingTo, text: data.arrivingTo, offset: offsetArriving)
         }else {
             bgImageView.image = UIImage(named: data.weatherImageName)
             snowView.isHidden = !data.showWeatherEffects
@@ -140,6 +145,35 @@ class ViewController: UIViewController {
             label.transform = .identity
 
             auxLabel.removeFromSuperview()
+        })
+    }
+
+    func moveLabel(label: UILabel, text: String, offset: CGPoint) {
+        let auxLabel = UILabel(frame: label.frame)
+        auxLabel.text = label.text
+        auxLabel.textAlignment = label.textAlignment
+        auxLabel.textColor = label.textColor
+        auxLabel.font = label.font
+        auxLabel.backgroundColor = label.backgroundColor
+
+        auxLabel.transform = CGAffineTransform(translationX: offset.x, y: offset.y)
+        auxLabel.alpha = 0.0
+        view.addSubview(auxLabel)
+
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+            label.transform = CGAffineTransform(translationX: offset.x, y: offset.y)
+            label.alpha = 0.0
+        }, completion: nil)
+
+        UIView.animate(withDuration: 0.25, delay: 0.1, options: .curveEaseIn, animations: {
+            auxLabel.transform = .identity
+            auxLabel.alpha = 1.0
+        }, completion: {_ in
+            // clean up
+            auxLabel.removeFromSuperview()
+            label.text = text
+            label.alpha = 1.0
+            label.transform = .identity
         })
     }
 }
