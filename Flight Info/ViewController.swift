@@ -65,7 +65,8 @@ class ViewController: UIViewController {
     //start rotating the flights
     changeFlight(to: londonToParis)
 
-    _ = "Just Testing multiple projects in one repository"
+    _ = "Added orphan repository"
+    let temp = "Temp Variable for Test"
   }
   
   //MARK: custom methods
